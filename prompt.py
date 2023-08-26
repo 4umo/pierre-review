@@ -58,7 +58,7 @@ llm3 = ChatOpenAI(model_name="gpt-3.5-turbo",
                   request_timeout=240,
                   max_retries=4,
                   max_tokens=1000,
-                  streaming=True
+                  streaming=True,
     )
 
 llm_a = ChatAnthropic() 
@@ -73,16 +73,9 @@ g = Github(auth=auth)
 for repo in g.get_user().get_repos():
     print(repo.name)
 
-def get_pr_diff(repository_name, pr_number, github_token):
-    # Initialize GitHub API client
-    auth = Auth.Token(github_token)
-
-    # Public Web Github
-    g = Github(auth=auth)
-    # g = Github(github_token)
-    
+def get_pr_diff(client, repository_name, pr_number):
     # Get the repository
-    repo = g.get_repo(repository_name)
+    repo = client.get_repo(repository_name)
     
     # Get the pull request by number
     pr = repo.get_pull(pr_number)

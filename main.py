@@ -1,18 +1,22 @@
 import os
+import json
 from github import Github, Auth
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
+# from prompt import (get_pr_diff)
 
 def main():
     # read env
     print(os.environ)
     
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
+    GITHUB_EVENT_PATH = os.environ.get('GITHUB_EVENT_PATH', None)
     PIERRE_LANGCHAIN_LLM_API_TOKEN = os.environ.get('PIERRE_LANGCHAIN_LLM_API_TOKEN', None)
     PIERRE_LANGCHAIN_LLM_API_NAME = os.environ.get('PIERRE_LANGCHAIN_LLM_API_NAME', None)
     
     if not GITHUB_TOKEN or not PIERRE_LANGCHAIN_LLM_API_TOKEN or not PIERRE_LANGCHAIN_LLM_API_NAME:
         print(f"""Missing environment variables:
         {'GITHUB_TOKEN' if not GITHUB_TOKEN else ''}
+        {'GITHUB_EVENT_PATH' if not GITHUB_EVENT_PATH else ''}
         {'PIERRE_LANGCHAIN_LLM_API_TOKEN' if not PIERRE_LANGCHAIN_LLM_API_TOKEN else ''}
         {'PIERRE_LANGCHAIN_LLM_API_NAME' if not PIERRE_LANGCHAIN_LLM_API_NAME else ''}
         """)
@@ -51,7 +55,17 @@ def main():
         print(f"Error initializing {PIERRE_LANGCHAIN_LLM_API_NAME} client: {e}")
         return 1
 
+    event_json = {}
+    with open(GITHUB_EVENT_PATH, 'r') as f:
+        event_json = json.load(f)
+    
+    print(event_json)
     # fetch the diff
+    repo = None
+    pr_number = None
+    
+    # diff = get_pr_diff(gh, repository_name=repo, pr_number=pr_number)
+
 
     # send to langchain
 
