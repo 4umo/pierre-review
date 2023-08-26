@@ -2,6 +2,8 @@
 
 ## Overview
 
+🥖 🥖 🥖
+
 Meet Pierre-Review, your personal PR (Pull Request) reviewer. Designed to streamline your code review process, Pierre automatically adds a comment on pull requests based on the code differences. This GitHub Action uses LLMs to summarize the PR and make your team's PR reviews a breeze.
 
 ## Features
