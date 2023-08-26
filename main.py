@@ -63,22 +63,19 @@ def main():
 
     # Get the repository
     repo = gh.get_repo(repo_name)
-    
-    # Get the pull request by number
     pr = repo.get_pull(pr_number)
-    # print(pr.body)
-
-    # pr.edit(body: Union[str, _NotSetType])
-
-    # return 0
     
     diff = '\n\n'.join([f.patch for f in pr.get_files()])
+    diff = pr.get_files()[0].patch
     
     # send to langchain
     gen_description = generate_prompt(code_diff=diff, llm=llm)
     
     # write a comment/description
-
+    pr.create_issue_comment(f"""🇫🇷 Pierre Review ☕️🥖:
+                            {gen_description}
+    """)
+    
     return 0
 
 if __name__ == "__main__":
