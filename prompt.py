@@ -43,18 +43,6 @@ Do not include the file name in the summary and list the summary with bullet poi
 ```
 """
 
-def get_pr_diff(client, repository_name, pr_number):
-    # Get the repository
-    repo = client.get_repo(repository_name)
-    
-    # Get the pull request by number
-    pr = repo.get_pull(pr_number)
-    
-    # Get the diff for the pull request
-    diff_content = pr.get_files()[0].patch
-    return diff_content
-
-
 def generate_prompt(code_diff, llm, summary_prompt=SUMMARY_PROMPT) -> str:
     """Load the summary yaml"""
 

@@ -2,7 +2,7 @@ import os
 import json
 from github import Github, Auth
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
-from prompt import (get_pr_diff, generate_prompt)
+from prompt import (generate_prompt)
 
 def main():
     # read env
@@ -59,17 +59,25 @@ def main():
     
     # fetch the diff
     pr_number = event["number"]
-    repo = event["pull_request"]["base"]["repo"]["full_name"]
-    print(repo, pr_number)
-    diff = get_pr_diff(gh, repository_name=repo, pr_number=pr_number)
+    repo_name = event["pull_request"]["base"]["repo"]["full_name"]
 
+    # Get the repository
+    repo = gh.get_repo(repo_name)
+    
+    # Get the pull request by number
+    pr = repo.get_pull(pr_number)
+    # print(pr.body)
+
+    # pr.edit(body: Union[str, _NotSetType])
+
+    # return 0
+    
+    diff = pr.get_files()[0].patch
+    
     # send to langchain
-    comment = generate_prompt(code_diff=diff, llm=llm)
+    gen_description = generate_prompt(code_diff=diff, llm=llm)
     
     # write a comment/description
-
-    print(comment)
-
 
     return 0
 
