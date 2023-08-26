@@ -17,3 +17,26 @@ Add Pierre-Review as a github action to your repository!
 ## Usage
 
 Once installed, Pierre-Review will automatically comment on new pull requests and updates to existing ones.
+
+## Installation
+
+Create a `.github/workflows/pierre-review.yml` file in your GitHub repository.
+Add the following YAML configuration to pierre-review.yml:
+
+```yaml
+name: Pierre-Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  autocomment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Pierre-Review
+        uses: yourusername/pierre-review@main
+```
