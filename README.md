@@ -1,4 +1,4 @@
-# 🇫🇷 Pierre-Review ☕️ 🥖: Your Personal PR Reviewer
+# 🇫🇷 Pierre-Review ☕️ 🥖 - LLM Powered PR Summaries
 
 ## Overview
 
