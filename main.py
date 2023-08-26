@@ -78,7 +78,8 @@ def main():
     
     # write a comment/description
     pr.create_issue_comment(f"""🇫🇷 Pierre Review ☕️🥖:
-                            {gen_description}
+                            
+{gen_description}
     """)
     
     return 0
