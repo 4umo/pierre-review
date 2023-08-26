@@ -1,7 +1,11 @@
 """Interface for a GPT Prompts."""
 import os
 import sys
-from github import Github
+from dotenv import dotenv_values
+from github import Github 
+from github import Auth
+
+config = dotenv_values(".env")
 
 # from langchain.prompts import (
 #     ChatPromptTemplate,
@@ -23,19 +27,32 @@ Summarize the following file changed in a pull request submitted by a developer 
   {diff}
 """
 
-# def get_pr_diff(repository_name, pr_number, github_token):
-#     # Initialize GitHub API client
-#     g = Github(github_token)
+# using an access token
+auth = Auth.Token(config["GITHUB_ACCESS_TOKEN"])
+
+# First create a Github instance:
+
+# Public Web Github
+g = Github(auth=auth)
+
+# Then play with your Github objects:
+for repo in g.get_user().get_repos():
+    print(repo.name)
+
+def get_pr_diff(repository_name, pr_number, github_token):
+    # Initialize GitHub API client
+    g = Github(github_token)
     
-#     # Get the repository
-#     repo = g.get_repo(repository_name)
+    # Get the repository
+    repo = g.get_repo(repository_name)
     
-#     # Get the pull request by number
-#     pr = repo.get_pull(pr_number)
+    # Get the pull request by number
+    pr = repo.get_pull(pr_number)
     
-#     # Get the diff for the pull request
-#     diff_content = pr.get_files()[0].patch
-#     return diff_content
+    # Get the diff for the pull request
+    diff_content = pr.get_files()[0].patch
+    return diff_content
+
 
 
 
