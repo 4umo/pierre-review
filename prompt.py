@@ -1,37 +1,11 @@
 """Interface for a GPT Prompts."""
-import os
-import sys
-from dotenv import dotenv_values
-from github import Github 
-from github import Auth
-
 
 from langchain.prompts import (
     ChatPromptTemplate,
-    SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
-    AIMessagePromptTemplate
 )
 
 from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI, ChatAnthropic
-import openai 
-
-from llamaapi import LlamaAPI
-# Replace 'Your_API_Token' with your actual API token
-llama = LlamaAPI('Your_API_Token')
-
-from langchain_experimental.llms import ChatLlamaAPI
-
-llm_llama = ChatLlamaAPI(client=llama)
-
-config = dotenv_values(".env")
-
-try:
-    os.environ["OPENAI_API_KEY"] = config["OPENAI_API_KEY"]
-    os.environ["ANTHROPIC_API_KEY"] = config["ANTHROPIC_API_KEY"]
-except:
-    pass
 
 
 SUMMARY_PROMPT = """
@@ -58,9 +32,3 @@ def generate_prompt(code_diff, llm, summary_prompt=SUMMARY_PROMPT) -> str:
     output = chain.run({"diff": code_diff})
     
     return output 
-
-
-
-# pr_diff_example = get_pr_diff("aummo/pierre-review", 1, config["GITHUB_ACCESS_TOKEN"])
-
-# generate_prompt(pr_diff_example)
