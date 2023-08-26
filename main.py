@@ -36,21 +36,12 @@ def main():
                     request_timeout=240,
                     max_retries=4,
                     max_tokens=1000,
-<<<<<<< Updated upstream
                     streaming=True,
-                    openai_api_key=LANGCHAIN_LLM_KEY
-                    )
-        elif LANGCHAIN_LLM_KEY == 'anthropic':
-            llm = ChatAnthropic(model_name="claude-instant", anthropic_api_key=LANGCHAIN_LLM_API_TOKEN)
-        elif LANGCHAIN_LLM_KEY == 'code-llama':
-=======
-                    streaming=True
                     openai_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN
-                    )
+            )
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'anthropic':
             llm = ChatAnthropic(model_name="claude-instant", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'code-llama':
->>>>>>> Stashed changes
             llm = None
         else:
             raise Exception(f"""Unsupported PIERRE_LANGCHAIN_LLM_API_NAME: {PIERRE_LANGCHAIN_LLM_API_NAME}
