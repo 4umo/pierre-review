@@ -1,4 +1,4 @@
-# Pierre-Review: Your Personal PR Reviewer
+# 🇫🇷 Pierre-Review ☕️ 🥖: Your Personal PR Reviewer
 
 ## Overview
 
@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run Pierre-Review
-        uses: yourusername/pierre-review@main
+        uses: aummo/pierre-review@main
 ```
 
 ## Configuration
