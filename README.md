@@ -14,11 +14,7 @@ Meet Pierre-Review, your personal PR (Pull Request) reviewer. Designed to stream
 
 ## Quick Start
 
-Add Pierre-Review as a github action to your repository!
-
-## Usage
-
-Once installed, Pierre-Review will automatically comment on new pull requests and updates to existing ones.
+Add Pierre-Review as a github action to your repository! Once installed, Pierre-Review will automatically comment on new pull requests and add updates to existing ones.
 
 ## Installation
 
@@ -41,4 +37,17 @@ jobs:
 
       - name: Run Pierre-Review
         uses: yourusername/pierre-review@main
+```
+
+## Configuration
+
+### Available LLMs
+
+You can choose which LLM model Pierre uses by changing the `PIERRE_LANGCHAIN_LLM_API_NAME` environment variable in your github secrets. Pierre supports the following LLMs out of the box:
+
+`open-ai` - running model "gpt-3.5-turbo"
+`anthropic` - running model "claude-instant"
+
+```
+PIERRE_LANGCHAIN_LLM_API_NAME=open-ai|anthropic
 ```
