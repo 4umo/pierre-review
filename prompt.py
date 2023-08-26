@@ -7,30 +7,38 @@ from github import Auth
 
 config = dotenv_values(".env")
 
-# from langchain.prompts import (
-#     ChatPromptTemplate,
-#     SystemMessagePromptTemplate,
-#     HumanMessagePromptTemplate,
-#     AIMessagePromptTemplate
-# )
-# from langchain.chains import LLMChain
-# from langchain.chat_models import ChatOpenAI
-# from dotenv import dotenv_values
+from langchain.prompts import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+    AIMessagePromptTemplate
+)
+from langchain.chains import LLMChain
+from langchain.chat_models import ChatOpenAI, ChatAnthropic
+from dotenv import dotenv_values
 
 import openai 
 
 SUMMARY_PROMPT = """
-Summarize the following file changed in a pull request submitted by a developer on GitHub,
-  focusing on major modifications, additions, deletions, and any significant updates within the files.
-  Do not include the file name in the summary and list the summary with bullet points.
+Summarize the following files changed in a pull request denoted in backticks submitted by a developer on GitHub, focusing on major modifications, additions, deletions, and any significant updates within the files.
+Do not include the file name in the summary and list the summary with bullet points.
 
-  {diff}
+```
+{diff}
+```
 """
+
+
+llm3 = ChatOpenAI(model_name="gpt-3.5-turbo", 
+                  temperature=0.7, 
+                  request_timeout=240,
+                  max_retries=4,
+                  max_tokens=1000,
+                  streaming=True
+    )
 
 # using an access token
 auth = Auth.Token(config["GITHUB_ACCESS_TOKEN"])
-
-# First create a Github instance:
 
 # Public Web Github
 g = Github(auth=auth)
@@ -41,7 +49,11 @@ for repo in g.get_user().get_repos():
 
 def get_pr_diff(repository_name, pr_number, github_token):
     # Initialize GitHub API client
-    g = Github(github_token)
+    auth = Auth.Token(github_token)
+
+    # Public Web Github
+    g = Github(auth=auth)
+    # g = Github(github_token)
     
     # Get the repository
     repo = g.get_repo(repository_name)
@@ -53,12 +65,28 @@ def get_pr_diff(repository_name, pr_number, github_token):
     diff_content = pr.get_files()[0].patch
     return diff_content
 
+get_pr_diff("aummo/pierre-review", 1, config["GITHUB_ACCESS_TOKEN"])
 
 
+def generate_prompt(code_diff, summary_prompt=SUMMARY_PROMPT, llm=llm3) -> str:
+    """Load the summary yaml"""
 
-# def generate_prompt(summary_prompt = SUMMARY_PROMPT) -> str:
-#     """Load the summary yaml"""
-#     summary_prompt
+    # system_prompt = SystemMessagePromptTemplate.from_template(
+    #     SUMMARY_PROMPT)
+
+    human_prompt = HumanMessagePromptTemplate.from_template(
+        summary_prompt)
+
+    prompt_template = ChatPromptTemplate.from_messages(
+        [human_prompt])
+        
+    chain = LLMChain(llm=llm,
+                     prompt=prompt_template)
+
+    output = chain.run({"diff": code_diff})
+    
+    return output 
+
 
 # def generate_comment():
 #     """Run the prompt to get PR comment"""
