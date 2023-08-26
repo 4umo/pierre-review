@@ -5,7 +5,6 @@ from dotenv import dotenv_values
 from github import Github 
 from github import Auth
 
-config = dotenv_values(".env")
 
 from langchain.prompts import (
     ChatPromptTemplate,
@@ -15,9 +14,16 @@ from langchain.prompts import (
 )
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
-from dotenv import dotenv_values
-
 import openai 
+
+config = dotenv_values(".env")
+
+try:
+    os.environ["OPENAI_API_KEY"] = config["OPENAI_API_KEY"]
+    os.environ["ANTHROPIC_API_KEY"] = config["ANTHROPIC_API_KEY"]
+except:
+    pass
+
 
 SUMMARY_PROMPT = """
 Summarize the following files changed in a pull request denoted in backticks submitted by a developer on GitHub, focusing on major modifications, additions, deletions, and any significant updates within the files.
@@ -29,8 +35,6 @@ Do not include the file name in the summary and list the summary with bullet poi
 """
 
 
-os.environ["OPENAI_API_KEY"] = config["OPENAI_KEY"]
-
 llm3 = ChatOpenAI(model_name="gpt-3.5-turbo", 
                   temperature=0.7, 
                   request_timeout=240,
@@ -39,7 +43,7 @@ llm3 = ChatOpenAI(model_name="gpt-3.5-turbo",
                   streaming=True
     )
 
-# llma = ChatAnthropic(model_name="claude-instant") 
+llma = ChatAnthropic() 
 
 
 # using an access token
