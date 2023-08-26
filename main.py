@@ -38,7 +38,7 @@ def main():
     try:
         if PIERRE_LANGCHAIN_LLM_API_NAME == 'open-ai':
             llm = ChatOpenAI(
-                    model_name="gpt-3.5-turbo-16k", 
+                    model_name="gpt-4-32k", 
                     temperature=0.7, 
                     request_timeout=240,
                     max_retries=4,
@@ -47,7 +47,7 @@ def main():
                     openai_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN
             )
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'anthropic':
-            llm = ChatAnthropic(model_name="claude-instant", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
+            llm = ChatAnthropic(model_name="claude-2", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'code-llama':
             llm = ChatLlamaAPI(client=LlamaAPI(PIERRE_LANGCHAIN_LLM_API_TOKEN))
         else:
