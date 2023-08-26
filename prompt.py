@@ -1,7 +1,7 @@
 """Interface for a GPT Prompts."""
 import os
 import sys
-import PyGithub 
+from github import Github
 
 # from langchain.prompts import (
 #     ChatPromptTemplate,
