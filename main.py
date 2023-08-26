@@ -2,6 +2,9 @@ import os
 import json
 from github import Github, Auth
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
+from langchain_experimental.llms import ChatLlamaAPI
+from llamaapi import LlamaAPI
+
 from prompt import (generate_prompt)
 
 def main():
@@ -37,7 +40,7 @@ def main():
     try:
         if PIERRE_LANGCHAIN_LLM_API_NAME == 'open-ai':
             llm = ChatOpenAI(
-                    model_name="gpt-3.5-turbo-16k", 
+                    model_name="gpt-4-32k", 
                     temperature=0.7, 
                     request_timeout=240,
                     max_retries=4,
@@ -46,9 +49,9 @@ def main():
                     openai_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN
             )
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'anthropic':
-            llm = ChatAnthropic(model_name="claude-instant", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
+            llm = ChatAnthropic(model_name="claude-2", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'code-llama':
-            llm = None
+            llm = ChatLlamaAPI(client=LlamaAPI(PIERRE_LANGCHAIN_LLM_API_TOKEN))
         else:
             raise Exception(f"""Unsupported PIERRE_LANGCHAIN_LLM_API_NAME: {PIERRE_LANGCHAIN_LLM_API_NAME}
                 Supported options: open-ai anthropic code-llama
@@ -77,7 +80,8 @@ def main():
     
     # write a comment/description
     pr.create_issue_comment(f"""🇫🇷 Pierre Review ☕️🥖:
-                            {gen_description}
+                            
+{gen_description}
     """)
     
     return 0
