@@ -33,7 +33,7 @@ def main():
     try:
         if PIERRE_LANGCHAIN_LLM_API_NAME == 'open-ai':
             llm = ChatOpenAI(
-                    model_name="gpt-3.5-turbo", 
+                    model_name="gpt-3.5-turbo-16k", 
                     temperature=0.7, 
                     request_timeout=240,
                     max_retries=4,
@@ -72,7 +72,7 @@ def main():
 
     # return 0
     
-    diff = pr.get_files()[0].patch
+    diff = '\n\n'.join([f.patch for f in pr.get_files()])
     
     # send to langchain
     gen_description = generate_prompt(code_diff=diff, llm=llm)
