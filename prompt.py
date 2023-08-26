@@ -12,9 +12,18 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
     AIMessagePromptTemplate
 )
+
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
 import openai 
+
+from llamaapi import LlamaAPI
+# Replace 'Your_API_Token' with your actual API token
+llama = LlamaAPI('Your_API_Token')
+
+from langchain_experimental.llms import ChatLlamaAPI
+
+llm_llama = ChatLlamaAPI(client=llama)
 
 config = dotenv_values(".env")
 
@@ -33,6 +42,15 @@ Do not include the file name in the summary and list the summary with bullet poi
 {diff}
 ```
 """
+SUMMARY_PROMPT = """
+Summarize the following files changed in a pull request denoted in backticks submitted by a developer on GitHub, focusing on major modifications, additions, deletions, and any significant updates within the files.
+Do not include the file name in the summary and list the summary with bullet points.
+
+```
+{diff}
+```
+"""
+
 
 
 llm3 = ChatOpenAI(model_name="gpt-3.5-turbo", 
@@ -43,7 +61,7 @@ llm3 = ChatOpenAI(model_name="gpt-3.5-turbo",
                   streaming=True
     )
 
-llma = ChatAnthropic() 
+llm_a = ChatAnthropic() 
 
 
 # using an access token
