@@ -29,6 +29,8 @@ Do not include the file name in the summary and list the summary with bullet poi
 """
 
 
+os.environ["OPENAI_API_KEY"] = config["OPENAI_KEY"]
+
 llm3 = ChatOpenAI(model_name="gpt-3.5-turbo", 
                   temperature=0.7, 
                   request_timeout=240,
@@ -37,9 +39,11 @@ llm3 = ChatOpenAI(model_name="gpt-3.5-turbo",
                   streaming=True
     )
 
+# llma = ChatAnthropic(model_name="claude-instant") 
+
+
 # using an access token
 auth = Auth.Token(config["GITHUB_ACCESS_TOKEN"])
-
 # Public Web Github
 g = Github(auth=auth)
 
@@ -65,7 +69,7 @@ def get_pr_diff(repository_name, pr_number, github_token):
     diff_content = pr.get_files()[0].patch
     return diff_content
 
-get_pr_diff("aummo/pierre-review", 1, config["GITHUB_ACCESS_TOKEN"])
+pr_diff_example = get_pr_diff("aummo/pierre-review", 1, config["GITHUB_ACCESS_TOKEN"])
 
 
 def generate_prompt(code_diff, summary_prompt=SUMMARY_PROMPT, llm=llm3) -> str:
@@ -86,6 +90,9 @@ def generate_prompt(code_diff, summary_prompt=SUMMARY_PROMPT, llm=llm3) -> str:
     output = chain.run({"diff": code_diff})
     
     return output 
+
+generate_prompt(pr_diff_example)
+
 
 
 # def generate_comment():
