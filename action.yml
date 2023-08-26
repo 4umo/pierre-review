@@ -1,0 +1,7 @@
+name: prbot
+author: Kevin, Austin & Menno
+description: a bot to update PRs
+
+runs:
+  using: docker
+  image: Dockerfile
