@@ -2,12 +2,10 @@ import os
 import json
 from github import Github, Auth
 from langchain.chat_models import ChatOpenAI, ChatAnthropic
-# from prompt import (get_pr_diff)
+from prompt import (get_pr_diff, generate_prompt)
 
 def main():
     # read env
-    print(os.environ)
-    
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
     GITHUB_EVENT_PATH = os.environ.get('GITHUB_EVENT_PATH', None)
     PIERRE_LANGCHAIN_LLM_API_TOKEN = os.environ.get('PIERRE_LANGCHAIN_LLM_API_TOKEN', None)
@@ -55,21 +53,23 @@ def main():
         print(f"Error initializing {PIERRE_LANGCHAIN_LLM_API_NAME} client: {e}")
         return 1
 
-    event_json = {}
+    event = {}
     with open(GITHUB_EVENT_PATH, 'r') as f:
-        event_json = json.load(f)
+        event = json.load(f)
     
-    print(event_json)
     # fetch the diff
-    repo = None
-    pr_number = None
-    
-    # diff = get_pr_diff(gh, repository_name=repo, pr_number=pr_number)
-
+    pr_number = event["number"]
+    repo = event["pull_request"]["base"]["repo"]["full_name"]
+    print(repo, pr_number)
+    diff = get_pr_diff(gh, repository_name=repo, pr_number=pr_number)
 
     # send to langchain
-
+    comment = generate_prompt(code_diff=diff, llm=llm)
+    
     # write a comment/description
+
+    print(comment)
+
 
     return 0
 
