@@ -1,4 +1,4 @@
-# 🇫🇷 Pierre-Review ☕️ 🥖 - LLM Powered PR Summaries
+# 🇫🇷 Pierre-Review ☕️ 🥖 - LLM-Powered PR Summaries
 
 ## Overview
 
