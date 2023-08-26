@@ -36,10 +36,10 @@ def main():
                     request_timeout=240,
                     max_retries=4,
                     max_tokens=1000,
-                    streaming=True
+                    streaming=True,
                     openai_api_key=LANGCHAIN_LLM_KEY
                     )
-        elif LANGCHAIN_LLM_KEY == 'code-llama':
+        elif LANGCHAIN_LLM_KEY == 'code-anthropic':
             llm = ChatAnthropic(model_name="claude-instant", anthropic_api_key=LANGCHAIN_LLM_API_TOKEN)
         elif LANGCHAIN_LLM_KEY == 'code-llama':
             llm = None
