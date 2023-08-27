@@ -36,6 +36,7 @@ def main():
 
     # setup client
     llm = None
+    char_limit = None
     try:
         if PIERRE_LANGCHAIN_LLM_API_NAME == 'open-ai':
             llm = ChatOpenAI(
@@ -47,10 +48,13 @@ def main():
                     streaming=True,
                     openai_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN
             )
+            char_limit = 16000
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'anthropic':
             llm = ChatAnthropic(model_name="claude-2", anthropic_api_key=PIERRE_LANGCHAIN_LLM_API_TOKEN)
+            char_limit = 50000
         elif PIERRE_LANGCHAIN_LLM_API_NAME == 'code-llama':
             llm = ChatLlamaAPI(client=LlamaAPI(PIERRE_LANGCHAIN_LLM_API_TOKEN))
+            char_limit = 4000
         else:
             raise Exception(f"""Unsupported PIERRE_LANGCHAIN_LLM_API_NAME: {PIERRE_LANGCHAIN_LLM_API_NAME}
                 Supported options: open-ai anthropic code-llama
@@ -71,7 +75,7 @@ def main():
     repo = gh.get_repo(repo_name)
     pr = repo.get_pull(pr_number)
     
-    diff = '\n\n'.join([f.patch for f in pr.get_files()])[0:16000]
+    diff = '\n\n'.join([f.patch for f in pr.get_files()])[0:char_limit]
     print(diff)
     
     # send to langchain
