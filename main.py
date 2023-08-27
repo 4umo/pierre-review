@@ -10,8 +10,6 @@ from prompt import (generate_prompt)
 def main():
     # read env
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', None)
-    GH_APP_ID = os.environ.get('GH_APP_ID', None)
-    GH_APP_PKEY = os.environ.get('GH_APP_PKEY', None)
     GITHUB_EVENT_PATH = os.environ.get('GITHUB_EVENT_PATH', None)
     PIERRE_LANGCHAIN_LLM_API_TOKEN = os.environ.get('PIERRE_LANGCHAIN_LLM_API_TOKEN', None)
     PIERRE_LANGCHAIN_LLM_API_NAME = os.environ.get('PIERRE_LANGCHAIN_LLM_API_NAME', None)
@@ -19,8 +17,6 @@ def main():
     if not GITHUB_TOKEN or not PIERRE_LANGCHAIN_LLM_API_TOKEN or not PIERRE_LANGCHAIN_LLM_API_NAME:
         print(f"""Missing environment variables:
         {'GITHUB_TOKEN' if not GITHUB_TOKEN else ''}
-        {'GH_APP_ID' if not GH_APP_ID else ''}
-        {'GH_APP_PKEY' if not GH_APP_PKEY else ''}
         {'GITHUB_EVENT_PATH' if not GITHUB_EVENT_PATH else ''}
         {'PIERRE_LANGCHAIN_LLM_API_TOKEN' if not PIERRE_LANGCHAIN_LLM_API_TOKEN else ''}
         {'PIERRE_LANGCHAIN_LLM_API_NAME' if not PIERRE_LANGCHAIN_LLM_API_NAME else ''}
@@ -30,7 +26,7 @@ def main():
     # setup client
     gh = None
     try:
-        gh = Github(auth=Auth.AppAuth(GH_APP_ID, GH_APP_PKEY))
+        gh = Github(auth=Auth.Token(GITHUB_TOKEN))
     except Exception as e:
         print(f"Error initializing Github client:")
         print(e)
