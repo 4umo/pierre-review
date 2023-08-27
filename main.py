@@ -32,7 +32,8 @@ def main():
     try:
         gh = Github(auth=Auth.AppAuth(GH_APP_ID, GH_APP_PKEY))
     except Exception as e:
-        print(f"Error initializing Github client: {e}")
+        print(f"Error initializing Github client:")
+        print(e)
         return 1
 
     # setup client
@@ -40,8 +41,8 @@ def main():
     try:
         if PIERRE_LANGCHAIN_LLM_API_NAME == 'open-ai':
             llm = ChatOpenAI(
-                    model_name="gpt-4-32k", 
-                    temperature=0.7, 
+                    model_name="gpt-3.5-turbo-16k", 
+                    temperature=0.0, 
                     request_timeout=240,
                     max_retries=4,
                     max_tokens=1000,
@@ -72,8 +73,8 @@ def main():
     repo = gh.get_repo(repo_name)
     pr = repo.get_pull(pr_number)
     
-    diff = '\n\n'.join([f.patch for f in pr.get_files()])
-    diff = pr.get_files()[0].patch
+    diff = '\n\n'.join([f.patch for f in pr.get_files()])[0:16000]
+    print(diff)
     
     # send to langchain
     gen_description = generate_prompt(code_diff=diff, llm=llm)
