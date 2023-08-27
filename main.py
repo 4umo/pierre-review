@@ -30,7 +30,8 @@ def main():
     try:
         gh = Github(auth=Auth.Token(GH_PAT_TOKEN))
     except Exception as e:
-        print(f"Error initializing Github client: {e}")
+        print(f"Error initializing Github client:")
+        print(e)
         return 1
 
     # setup client
