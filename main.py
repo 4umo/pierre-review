@@ -76,7 +76,6 @@ def main():
     pr = repo.get_pull(pr_number)
     
     diff = '\n\n'.join([f.patch for f in pr.get_files()])[0:char_limit]
-    print(diff)
     
     # send to langchain
     gen_description = generate_prompt(code_diff=diff, llm=llm)
